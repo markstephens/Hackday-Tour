@@ -1,0 +1,115 @@
+#start_tour {
+	position: fixed;
+	width: 12em;
+	right: 0;
+	bottom: 6em;
+	background: #FFF;
+	border: solid 1px #CCC;
+	padding: 1em;
+	cursor: pointer;
+	border-radius: 0.5em;
+	margin-right: -0.5em;
+	box-shadow: 5px 5px 20px #333;
+	z-index: 100000;
+	-webkit-animation-name: tourbutton;
+	-webkit-animation-duration: 6s;
+    -webkit-animation-iteration-count: 1;
+}
+#start_tour:hover, #tour_panel {
+	background: #FFC;
+}
+#tour_panel {
+	font-family: Georgia,serif;
+	position: fixed;
+	top: 5%;
+	left: 5%;
+	width: 90%;
+	height: 90%;
+	background: #FFF;
+	border: solid 1px #000;
+	/*border-radius: 0.5em;*/
+	box-shadow: 10px 10px 20px #333;
+	z-index: 100000;
+	overflow: auto;
+}
+#tour_panel .close_panel {
+	float: right;
+	color: #FFF;
+	font-size: 2em;
+	margin: 0.4em;
+}
+#tour_panel h1 {
+	font-size: 2em;
+	line-height: 1em;
+	font-weight: normal;
+	margin: 0.2em 0;
+}
+#tour_panel h2 {
+	font-size: 2em;
+	font-weight: normal;
+	margin: 1em 0;
+	line-height: 1.2em;
+}
+#tour_panel h1.title {
+	margin: 0 0 1em;
+	padding: 0.3em;
+	background: #3d52b7;
+	color: #FFF;
+}
+#tour_panel .content {
+	margin: 1em;
+	font-family: arial;
+}
+#tour_panel .content h1, #tour_panel .content h2 {
+	font-family: Georgia,serif;
+}
+#tour_panel .article {
+	margin: 0.5em 1em 2em;
+	font-size: 0.8em;
+}
+#tour_panel .article .link {
+	text-align: right;
+	margin: 0.3em;
+}
+#tour_panel .article.main {
+	font-size: 1.2em;
+	float: left;
+	width: 50%;
+	margin-top: -0.2em;
+}
+#tour_panel .article.main h1 {
+	margin: 0.1em 0;
+}
+#tour_panel #tour_next_previous {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background: #cec6b9;
+}
+#tour_panel #tour_next_previous .button {
+	padding: 0.3em 0.5em;
+	margin: 0.5em;
+	border: solid 1px #000;
+	background: #FFF;
+	color: #000;
+}
+#tour_panel #tour_next_previous .button:hover {
+	background: #3d51bb;
+	color: #FFF;
+}
+#tour_panel #tour_next_previous .next {
+	float: right;
+}
+#tour_panel #tour_next_previous .previous {
+	display: inline-block;
+}
+
+
+@-webkit-keyframes tourbutton {
+	0%   {bottom: -10em;}
+	65%  {bottom: -10em;}
+    75%  {bottom: 7em;}
+    85%  {bottom: 6em;}
+    93% {bottom: 6.5em;}
+    100% {bottom: 6em;}
+}
