@@ -30,9 +30,6 @@ var hackday_tour = (function ($, IN) {
 	// First page of the tour
 	function start_tour() {
 		IN.User.authorize(function () {
-
-			panel('Loading...', 'Loading...');
-
 			// GET profile info
 			IN.API.Raw("/people/~").result(function (profile) {
 				IN.API.Raw("/people/~/picture-url").result(function (picture) {
@@ -114,6 +111,7 @@ var hackday_tour = (function ($, IN) {
 				].join(''))
 			.on('click', function () {
 				$(this).hide();
+				panel('Loading...', 'Loading...');
 				start_tour()
 			});
 	}
