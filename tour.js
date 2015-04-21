@@ -2,9 +2,16 @@ var lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas v
 var hackday_tour = (function ($, IN) {
 
 	// Render the panel
-	function panel(title, content, next, previous) {
+	function panel(title, content, next, previous, add_class) {
 		close();
-		$('body').append('<div id="tour_panel"></div>');
+
+		var classes = [];
+
+		if (typeof add_class !== "undefined") {
+			classes.push(add_class);
+		}
+
+		$('body').append('<div id="tour_panel" class="' + classes.join(' ') + '"></div>');
 		$('#tour_panel').append('<a href="javascript:// Close" class="close_panel">x</a>');
 		$('#tour_panel').append('<h1 class="title">' + title + '</h1>');
 		$('#tour_panel').append('<div class="content">' + content + '</div>');
@@ -27,18 +34,30 @@ var hackday_tour = (function ($, IN) {
 		$('#tour_panel').remove();
 	}
 
+	// Intro screen
+	function intro() {
+		panel('This tour will help you discover content on ft.com.',
+		[
+		'<div><img src="http://localhost:8000/hackday-linkedin-intro.png" style="width:70%;margin-left:10%;" /></div>',
+		'<h2 style="text-align:center; color:#444">(Judges are awesome!)</h2>'
+		].join(''), start_tour);
+	}
+
 	// First page of the tour
 	function start_tour() {
 		IN.User.authorize(function () {
 			// GET profile info
 			IN.API.Raw("/people/~").result(function (profile) {
 				IN.API.Raw("/people/~/picture-url").result(function (picture) {
-					panel('<img src="' + picture + '" align="abs-middle" height="35" /> Welcome to your tour ' + profile.firstName,
+					panel('Welcome to your tour ' + profile.firstName,
 						[
-						'<h2>This tour will help you discover content on ft.com.<br>',
-						'<img src="http://localhost:8000/hackday-linkedin-intro.png" style="width:60%" /></h2>',
-						'<h2>Judges are awesome!</h2>'
-						].join(''), articles_by_industry);
+						'<div class="splash">',
+						'<h2><img src="' + picture + '" align="absmiddle" />  You&rsquo;re all set.</h2>',
+						'<h1>Start with what&rsquo;s popular in your industry</h1>',
+						'</div>'
+						].join(''), articles_by_industry, undefined, 'industry');
+
+					$('#start_button').on('click', articles_by_industry);
 				});
 			});
 		});
@@ -55,34 +74,46 @@ var hackday_tour = (function ($, IN) {
 		return [
 			'<section class="', classes.join(' '),'">',
 			'<h1 class="headline">', article.title, '</h1>',
-			'<p class="subhead">', article.subhead, '</p>',
-			'<p class="link"><a href="', article.link,'">Read more on ', article.title, '</a>',
+			'<img src="', article.imageUrl, '" align="right" width="', (classes.indexOf('main') !== -1 ? 400 : 200) ,'" />',
+			'<p class="subhead">', article.previewText, '</p>',
+			'<p class="link"><a href="http://www.ft.com/s/', article.id,'" target="_blank">Read more on ', article.title, '</a>',
 			'</section>',
 		].join('')
 	}
 
 	function articles_by_industry() {
 		IN.API.Raw("/people/~/industry").result(function (industry) {
-			panel(industry, [
-				article({ title: 'Headline 1', subhead: lorem}, 'main'),
-				article({ title: 'Headline 2', subhead: lorem}),
-				article({ title: 'Headline 3', subhead: lorem}),
-				].join(''), articles_by_position, start_tour);
+			$.get('http://52.17.174.96:8080/articles?industry=' + encodeURIComponent(decodeURIComponent(industry)), function (articles) {
+				panel('Popular in the ' + industry + ' industry.', [
+					article(articles[0], 'main'),
+					article(articles[1]),
+					article(articles[2]),
+					].join(''), articles_by_position, start_tour);	
+			});
 		});
 	}
 
 	function articles_by_position() {
 		IN.API.Raw("/people/~/positions").result(function (positions) {
-			panel(positions.values[0].title, [
-				].join(''), articles_by_location, articles_by_industry);
+			$.get('http://52.17.174.96:8080/articles?position=' + encodeURIComponent(decodeURIComponent(positions.values[0].title)), function (articles) {
+				panel('Popular with ' + positions.values[0].title + ' professionals.', [
+					article(articles[0], 'main'),
+					article(articles[1]),
+					article(articles[2]),
+					].join(''), articles_by_location, articles_by_industry);
+			});
 		});
 	}
 
 	function articles_by_location (argument) {
 		IN.API.Raw("/people/~/location").result(function (location) {
-			panel(location.name, [
-				'<p>',location.country.code,'</p>'
-				].join(''), registered, articles_by_position);
+			$.get('http://52.17.174.96:8080/articles?country_code=' + encodeURIComponent(decodeURIComponent(location.country.code.toUpperCase())), function (articles) {
+				panel('Popular near you, ' + location.name + '.', [
+					article(articles[0], 'main'),
+					article(articles[1]),
+					article(articles[2]),
+					].join(''), registered, articles_by_position);
+			});
 		});
 	}
 
@@ -90,8 +121,9 @@ var hackday_tour = (function ($, IN) {
 		IN.API.Raw("/people/~/email-address").result(function (email) {
 			panel('You&rsquo;re registered!', [
 				'<h2>We&rsquo;ve used ', email, ' to register you.</h2>',
-				'<p>You&rsquo;ve been sent an email with your details.</p>',
-				'<p><a href="">Carry on reading articles</a></p>'
+				'<h2 style="float:right"><a href="http://www.ft.com">Carry on reading articles <img src="http://localhost:8000/button.png" class="arrow_button" /></a></h2>',
+				'<p><img src="http://localhost:8000/Email-Icon-1024x768.jpg" width="300" /></p>',
+				'<p>You&rsquo;ve been sent an email with your details.</p>'
 				].join(''), undefined, articles_by_location);
 		});
 	}
@@ -111,8 +143,7 @@ var hackday_tour = (function ($, IN) {
 				].join(''))
 			.on('click', function () {
 				$(this).hide();
-				panel('Loading...', 'Loading...');
-				start_tour()
+				intro()
 			});
 	}
 

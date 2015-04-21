@@ -18,6 +18,12 @@
 #start_tour:hover, #tour_panel {
 	background: #FFC;
 }
+.arrow_button {
+	background: #3d51bb;
+}
+.arrow_button:hover {
+	background: #FFC;
+}
 #tour_panel {
 	font-family: Georgia,serif;
 	position: fixed;
@@ -61,7 +67,7 @@
 	font-family: arial;
 }
 #tour_panel .content h1, #tour_panel .content h2 {
-	font-family: Georgia,serif;
+	/*font-family: Georgia,serif;*/
 }
 #tour_panel .article {
 	margin: 0.5em 1em 2em;
@@ -76,6 +82,7 @@
 	float: left;
 	width: 50%;
 	margin-top: -0.2em;
+	margin-left: 0;
 }
 #tour_panel .article.main h1 {
 	margin: 0.1em 0;
@@ -102,6 +109,21 @@
 }
 #tour_panel #tour_next_previous .previous {
 	display: inline-block;
+}
+
+.splash {
+	margin: 5em 0;
+}
+.splash > * {
+	float: left;
+	clear: left;
+	background: #FFF;
+	padding: 0.3em;
+}
+
+#tour_panel.industry {
+	background: url(http://localhost:8000/b1d78eef-42fd-4b66-9e2f-30f2a069b5f7.jpg);
+	background-size: cover;
 }
 
 
