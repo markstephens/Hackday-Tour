@@ -36,13 +36,13 @@
 	/*border-radius: 0.5em;*/
 	box-shadow: 10px 10px 20px #333;
 	z-index: 100000;
-	overflow: auto;
+	overflow: hidden;
 }
 #tour_panel .close_panel {
 	float: right;
 	color: #FFF;
-	font-size: 2em;
-	margin: 0.4em;
+	font-size: 3em;
+	margin: 0.5em;
 }
 #tour_panel h1 {
 	font-size: 2em;
@@ -61,6 +61,7 @@
 	padding: 0.3em;
 	background: #3d52b7;
 	color: #FFF;
+	font-size: 3em;
 }
 #tour_panel .content {
 	margin: 1em;
@@ -94,11 +95,12 @@
 	background: #cec6b9;
 }
 #tour_panel #tour_next_previous .button {
-	padding: 0.3em 0.5em;
-	margin: 0.5em;
+	padding: 0.8em 1.5em;
+	margin: 1em;
 	border: solid 1px #000;
 	background: #FFF;
 	color: #000;
+	border-radius: 0.5em;
 }
 #tour_panel #tour_next_previous .button:hover {
 	background: #3d51bb;
@@ -124,12 +126,17 @@
 #tour_panel.industry {
 	background: url(http://localhost:8000/b1d78eef-42fd-4b66-9e2f-30f2a069b5f7.jpg);
 	background-size: cover;
+	background-position: center center;
+}
+#tour_panel.registered {
+	background: url(http://localhost:8000/devices.png);
+	background-size: cover;
 }
 
 
 @-webkit-keyframes tourbutton {
 	0%   {bottom: -10em;}
-	65%  {bottom: -10em;}
+	50%  {bottom: -10em;}
     75%  {bottom: 7em;}
     85%  {bottom: 6em;}
     93% {bottom: 6.5em;}

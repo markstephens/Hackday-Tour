@@ -48,11 +48,11 @@ var hackday_tour = (function ($, IN) {
 		IN.User.authorize(function () {
 			// GET profile info
 			IN.API.Raw("/people/~").result(function (profile) {
-				IN.API.Raw("/people/~/picture-url").result(function (picture) {
-					panel('Welcome to your tour ' + profile.firstName,
+				IN.API.Raw("/people/~/picture-urls::(original)").result(function (pictures) {
+					panel('Welcome to your tour ' + profile.firstName + '.',
 						[
 						'<div class="splash">',
-						'<h2><img src="' + picture + '" align="absmiddle" />  You&rsquo;re all set.</h2>',
+						'<h2><img src="' + pictures.values[0] + '" align="absmiddle" width="160" />  You&rsquo;re all set.</h2>',
 						'<h1>Start with what&rsquo;s popular in your industry</h1>',
 						'</div>'
 						].join(''), articles_by_industry, undefined, 'industry');
@@ -76,7 +76,7 @@ var hackday_tour = (function ($, IN) {
 			'<h1 class="headline">', article.title, '</h1>',
 			'<img src="', article.imageUrl, '" align="right" width="', (classes.indexOf('main') !== -1 ? 400 : 200) ,'" />',
 			'<p class="subhead">', article.previewText, '</p>',
-			'<p class="link"><a href="http://www.ft.com/s/', article.id,'" target="_blank">Read more on ', article.title, '</a>',
+			'<p class="link"><a href="http://www.ft.com/s/', article.id,'" target="_blank">', article.title, ' &raquo;</a>',
 			'</section>',
 		].join('')
 	}
@@ -88,6 +88,9 @@ var hackday_tour = (function ($, IN) {
 					article(articles[0], 'main'),
 					article(articles[1]),
 					article(articles[2]),
+					article(articles[3], 'main'),
+					article(articles[4]),
+					article(articles[5]),
 					].join(''), articles_by_position, start_tour);	
 			});
 		});
@@ -100,6 +103,9 @@ var hackday_tour = (function ($, IN) {
 					article(articles[0], 'main'),
 					article(articles[1]),
 					article(articles[2]),
+					article(articles[3], 'main'),
+					article(articles[4]),
+					article(articles[5]),
 					].join(''), articles_by_location, articles_by_industry);
 			});
 		});
@@ -108,10 +114,13 @@ var hackday_tour = (function ($, IN) {
 	function articles_by_location (argument) {
 		IN.API.Raw("/people/~/location").result(function (location) {
 			$.get('http://52.17.174.96:8080/articles?country_code=' + encodeURIComponent(decodeURIComponent(location.country.code.toUpperCase())), function (articles) {
-				panel('Popular near you, ' + location.name + '.', [
+				panel('Popular near you, in ' + location.name + '.', [
 					article(articles[0], 'main'),
 					article(articles[1]),
 					article(articles[2]),
+					article(articles[3], 'main'),
+					article(articles[4]),
+					article(articles[5]),
 					].join(''), registered, articles_by_position);
 			});
 		});
@@ -120,11 +129,12 @@ var hackday_tour = (function ($, IN) {
 	function registered() {
 		IN.API.Raw("/people/~/email-address").result(function (email) {
 			panel('You&rsquo;re registered!', [
-				'<h2>We&rsquo;ve used ', email, ' to register you.</h2>',
-				'<h2 style="float:right"><a href="http://www.ft.com">Carry on reading articles <img src="http://localhost:8000/button.png" class="arrow_button" /></a></h2>',
-				'<p><img src="http://localhost:8000/Email-Icon-1024x768.jpg" width="300" /></p>',
-				'<p>You&rsquo;ve been sent an email with your details.</p>'
-				].join(''), undefined, articles_by_location);
+				'<div class="splash">',
+				'<h2>We&rsquo;ve used ', email, ' to register you.<br />&nbsp;<br />',				
+				'<img src="http://localhost:8000/Email-Icon-1024x768.jpg" width="100" align="absmiddle" /> You&rsquo;ve been sent an email with your details.</h2>',
+				'<h2 style="font-size:3em"><a href="http://www.ft.com">Carry on reading articles with your account &raquo;</a></h2>',
+				'</div>'
+				].join(''), undefined, articles_by_location, 'industry');
 		});
 	}
 
